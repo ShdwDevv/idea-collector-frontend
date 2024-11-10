@@ -12,21 +12,15 @@ async function loadNames() {
             names.forEach((name, index) => {
                 const listItem = document.createElement("li");
                 listItem.textContent = `${index + 1}. ${name} `; // Add serial number before the name
-
-                // Create the "X" mark to remove the name
                 const removeButton = document.createElement("span");
                 removeButton.textContent = " X";
-                removeButton.style.color = "white"; // Style the button to be visible
-                removeButton.style.cursor = "pointer"; // Make it clickable
-                removeButton.style.marginLeft = "10px"; // Add some space between name and "X"
-                
-                // Event listener to handle removal
+                removeButton.style.color = "white"; 
+                removeButton.style.cursor = "pointer";
+                removeButton.style.marginLeft = "10px"; 
                 removeButton.onclick = () => {
-                    removeName(name); // Call function to remove from backend
-                    listItem.remove(); // Remove the name from the DOM
+                    removeName(name); 
+                    listItem.remove(); 
                 };
-
-                // Append the remove button to the list item
                 listItem.appendChild(removeButton);
                 nameList.appendChild(listItem);
             });
@@ -37,18 +31,16 @@ async function loadNames() {
         console.error("Error loading names:", error);
     }
 }
-
-// Function to send a request to remove a name from the backend
 async function removeName(name) {
     try {
         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/remove-name`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: name }) // Send name as part of the request body
+            body: JSON.stringify({ name: name }) 
         });
         if (response.ok) {
             console.log("Name removed successfully");
-            loadNames(); // Refresh the name list after adding
+            loadNames(); 
         } else {
             console.error("Failed to remove name");
         }
@@ -56,19 +48,13 @@ async function removeName(name) {
         console.error("Error removing name:", error);
     }
 }
-
-// Handle form submission to add a new name
 const form = document.getElementById("nameForm");
 const nameInput = document.getElementById("name");
-
 form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // Prevent the form from submitting the traditional way
-
-    const nameValue = nameInput.value.trim(); // Get the trimmed input value
-
+    e.preventDefault();
+    const nameValue = nameInput.value.trim();
     if (nameValue) {
         try {
-            // Send the name to the backend
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/add-name`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -77,15 +63,13 @@ form.addEventListener("submit", async (e) => {
 
             if (response.ok) {
                 console.log("Name added successfully");
-                loadNames(); // Refresh the name list after adding
+                loadNames(); 
             } else {
                 console.error("Failed to add name");
             }
         } catch (error) {
             console.error("Error adding name:", error);
         }
-
-        // Clear the input field after submission
         nameInput.value = "";
     } else {
         console.log("Please enter a name");
